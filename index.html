@@ -3217,9 +3217,15 @@ function loadTpl(type){
 }
 function clearBoard(s){
   document.getElementById('canvas').querySelectorAll('.bi').forEach(function(e){e.remove();});
+  var cv=document.getElementById('canvas');
+  cv.style.background='#f5f0e8';
+  cv.style.backgroundImage='none';
+  var fo=document.getElementById('frame-overlay');
+  if(fo) fo.style.boxShadow='none';
+  _pbMir={bg:'#f5f0e8',frame:'none'};
   if(!s&&window._pbCurrentBoardId!==undefined)_pbCurrentBoardId=null;
   sel=null; document.getElementById('editPanel').style.display='none'; checkEmpty();
-  if(!s) toast(currentLang==='en'?'Board cleared':'Tableau efface');
+  if(!s) toast(currentLang==='en'?'Board cleared':'Tableau effacé');
 }
 
 /* ── PRAYER ── */
