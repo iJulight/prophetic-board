@@ -1150,10 +1150,10 @@ function setLang(l){
 
 <div class="cw">
   <div class="bc" id="canvas"><div id="frame-overlay" style="position:absolute;inset:0;pointer-events:none;z-index:9999;"></div>
-    <div class="eh" id="hint" style="color:#5a4a2a;">
+    <div class="eh" id="hint" style="color:#7a5c00;">
       <p style="font-size:1.25rem;"><span class="ifr on">✦ Ton tableau prophétique ✦</span><span class="ien">✦ Your prophetic board ✦</span></p>
       <p style="font-size:.82rem;margin-top:.25rem;"><span class="ifr on">Clique sur une photo ou symbole à gauche</span><span class="ien">Click a photo or symbol on the left</span><br><span class="ifr on">✏ pour modifier · Coins dorés pour redimensionner</span><span class="ien">✏ to edit · Golden corners to resize</span></p>
-      <p style="font-size:.75rem;margin-top:.4rem;color:#7a5c00;"><span class="ifr on">💡 Trop petit ? Ctrl + + pour agrandir</span><span class="ien">💡 Too small? Ctrl + + to zoom in</span></p>
+      <p style="font-size:.75rem;margin-top:.4rem;"><span class="ifr on">💡 Trop petit ? Ctrl + + pour agrandir</span><span class="ien">💡 Too small? Ctrl + + to zoom in</span></p>
     </div>
   </div>
 </div>
@@ -3219,16 +3219,14 @@ function clearBoard(s){
   document.getElementById('canvas').querySelectorAll('.bi').forEach(function(e){e.remove();});
   var cv=document.getElementById('canvas');
   cv.style.background='#f5f0e8';
-  cv.style.backgroundImage='none';
+  cv.style.backgroundImage='';
   cv.dataset.frame='none';
   var fo=document.getElementById('frame-overlay');
   if(fo) fo.style.boxShadow='none';
-  _pbMir={bg:'#f5f0e8',frame:'none'};
   if(!s&&window._pbCurrentBoardId!==undefined)_pbCurrentBoardId=null;
   sel=null; document.getElementById('editPanel').style.display='none'; checkEmpty();
   if(!s) toast(currentLang==='en'?'Board cleared':'Tableau effacé');
 }
-
 /* ── PRAYER ── */
 
 function stopPrayer(){if(timerInt){clearInterval(timerInt);timerInt=null;}closeM('timerModal');document.getElementById('timerDisp').textContent='00:00';}
