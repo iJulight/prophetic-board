@@ -1992,9 +1992,17 @@ function loadTpl(type){
 }
 function clearBoard(s){
   document.getElementById('canvas').querySelectorAll('.bi').forEach(function(e){e.remove();});
+  if(!s){
+    var cv=document.getElementById('canvas');
+    cv.style.background='#f5f0e8';
+    cv.style.backgroundImage='';
+    cv.dataset.frame='none';
+    var fo=document.getElementById('frame-overlay');
+    if(fo) fo.style.boxShadow='none';
+  }
   if(!s&&window._pbCurrentBoardId!==undefined)_pbCurrentBoardId=null;
   sel=null; document.getElementById('editPanel').style.display='none'; checkEmpty();
-  if(!s) toast(currentLang==='en'?'Board cleared':'Tableau efface');
+  if(!s) toast(currentLang==='en'?'Board cleared':'Tableau effacé');
 }
 
 /* ── PRAYER ── */
@@ -3217,12 +3225,15 @@ function loadTpl(type){
 }
 function clearBoard(s){
   document.getElementById('canvas').querySelectorAll('.bi').forEach(function(e){e.remove();});
-  var cv=document.getElementById('canvas');
-  cv.style.background='#f5f0e8';
-  cv.style.backgroundImage='';
-  cv.dataset.frame='none';
-  var fo=document.getElementById('frame-overlay');
-  if(fo) fo.style.boxShadow='none';
+  if(!s){
+    var cv=document.getElementById('canvas');
+    cv.style.background='#f5f0e8';
+    cv.style.backgroundColor='#f5f0e8';
+    cv.style.backgroundImage='';
+    cv.dataset.frame='none';
+    var fo=document.getElementById('frame-overlay');
+    if(fo) fo.style.boxShadow='none';
+  }
   if(!s&&window._pbCurrentBoardId!==undefined)_pbCurrentBoardId=null;
   sel=null; document.getElementById('editPanel').style.display='none'; checkEmpty();
   if(!s) toast(currentLang==='en'?'Board cleared':'Tableau effacé');
