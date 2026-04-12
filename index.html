@@ -4,7 +4,9 @@
 <meta charset="UTF-8">
 <meta name="google-site-verification" content="PzJasWM3jHD0Krhn7L_B9AVIOITXlFiktAMLuqxgj1Y" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Prophetic Board — Écris la vision</title>
+<title>Prophetic Board — Tableau prophétique chrétien de visualisation et prière</title>
+<meta name="description" content="Crée ton tableau prophétique chrétien de visualisation. Ajoute des versets bibliques, photos, mots d'encouragement et musique de prière. Disponible en français et anglais." />
+<meta name="keywords" content="tableau prophétique, tableau chrétien, tableau de visualisation, vision board chrétien, prière, versets bibliques, tableau de prière, prophétique" />
 <style id="_embedded_fonts">
 @font-face {
   font-family: 'Caveat';
@@ -4861,7 +4863,7 @@ function _initPaypalButton(){
       createSubscription:function(data,actions){
         return actions.subscription.create({plan_id:'P-6LT068144P461490RNHFOBLI'});
       },
-      onApprove:function(data,actions){
+     onApprove:function(data,actions){
         var subId=data.subscriptionID||'';
         localStorage.setItem('pb_pro','1');
         localStorage.setItem('pb_sub_id',subId);
@@ -4873,10 +4875,12 @@ function _initPaypalButton(){
         if(window._fbUser&&window._fbDb){
           _fbDb.collection('users').doc(_fbUser.uid).set({pro:true,subscriptionId:subId,proActivatedAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});
           /* Email confirmation à l'abonné */
-          fetch('https://formspree.io/f/xreovwrb',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({_subject:'✦ Ton accès PRO Prophetic Board est activé !',email:userEmail,name:(_fbUser.displayName||''),message:'Ton abonnement PRO est maintenant actif sur propheticboard.netlify.app — Que Dieu bénisse ta vision ✦'})}).catch(function(){});
+          fetch('https://formspree.io/f/xreovwrb',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({_subject:'✦ Ton accès PRO Prophetic Board est activé !',email:userEmail,name:(_fbUser.displayName||''),message:'Ton abonnement PRO est maintenant actif sur propheticboard.com — Que Dieu bénisse ta vision ✦'})}).catch(function(){});
         }
         /* Notifier Julight */
         fetch('https://formspree.io/f/mbdpovad',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({_subject:'Nouvel abonne PRO - '+(userEmail||subId),email:userEmail||'non connecte',subscriptionId:subId})}).catch(function(){});
+        /* Redirection automatique vers PRO */
+        setTimeout(function(){window.location.href='https://propheticboard.com?pro=ijulight2024';},2000);
       },
       onError:function(err){
         console.warn('PayPal error',err);
