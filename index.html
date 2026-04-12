@@ -3220,6 +3220,7 @@ function clearBoard(s){
   var cv=document.getElementById('canvas');
   cv.style.background='#f5f0e8';
   cv.style.backgroundImage='none';
+  cv.dataset.frame='none';
   var fo=document.getElementById('frame-overlay');
   if(fo) fo.style.boxShadow='none';
   _pbMir={bg:'#f5f0e8',frame:'none'};
