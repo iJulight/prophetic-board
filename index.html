@@ -2434,7 +2434,7 @@ function addTouchResize(el){
 }
 
 
-//* ══════════════════════════════════════════
+/* ══════════════════════════════════════════
    ✦ MODE ADMIN (secret)
    Tape le code "prophetik" n'importe où
    pour déverrouiller toutes les fonctions
@@ -2442,16 +2442,20 @@ function addTouchResize(el){
 var _adminMode = false;
 var _adminBuffer = '';
 var _ADMIN_CODE = 'prophetik';
+
 function _activateAdmin(){
   _adminMode = true;
-  _ADMIN_MODE = true;
+  _ADMIN_MODE = true;  // sync both vars
   localStorage.setItem('pb_admin', '1');
+  // Unlock ALL pro-lock elements (remove locked class)
   document.querySelectorAll('.pro-lock').forEach(function(el){
     el.classList.remove('locked');
   });
   document.body.classList.add('pro-unlocked');
   document.querySelectorAll('.pro-badge').forEach(function(el){el.style.display='none';});
+  // Override limits
   _FREE_LIMITS = {photos:9999, verses:9999, miracles:9999, text:9999, note:9999};
+  // Show indicator
   var ind = document.createElement('div');
   ind.id = 'adminIndicator';
   ind.style.cssText = 'position:fixed;bottom:8px;left:8px;background:rgba(201,168,76,.15);border:.5px solid var(--gold);color:var(--gold);font-family:"Jost",sans-serif;font-size:9px;letter-spacing:.15em;padding:4px 10px;border-radius:20px;z-index:9999;cursor:pointer;';
@@ -2462,6 +2466,7 @@ function _activateAdmin(){
   toast('✦ Mode admin activé — tout est déverrouillé !');
   _updateCounters();
 }
+
 function _deactivateAdmin(){
   _adminMode = false;
   _ADMIN_MODE = false;
@@ -2476,9 +2481,7 @@ function _deactivateAdmin(){
 function pbActivatePro(){
   /* Called after successful PayPal payment */
   localStorage.setItem('pb_pro','1');
-  document.querySelectorAll('.pro-lock').forEach(function(el){
-    el.classList.remove('locked');
-  });
+  document.querySelectorAll('.pro-lock').forEach(function(el){el.classList.remove('locked');});
   document.body.classList.add('pro-unlocked');
   document.querySelectorAll('.pro-badge').forEach(function(el){el.style.display='none';});
   _FREE_LIMITS = {photos:9999, verses:9999, miracles:9999, text:9999, note:9999};
@@ -2491,11 +2494,11 @@ function pbActivatePro(){
   }
   toast('✦ Prophetic Board PRO activé !');
   closeM('unlockModal');
-  _updateCounters();
 }
 /* Auto-restore PRO */
 if(localStorage.getItem('pb_pro')==='1'){ setTimeout(pbActivatePro, 400); }
-/* Activation via lien secret */
+
+/* Activation via lien secret : propheticboard.netlify.app?pro=ijulight2024 */
 (function(){
   var params = new URLSearchParams(window.location.search);
   if(params.get('pro')==='ijulight2024'){
@@ -2503,10 +2506,14 @@ if(localStorage.getItem('pb_pro')==='1'){ setTimeout(pbActivatePro, 400); }
     setTimeout(function(){
       pbActivatePro();
       toast('✦ Accès PRO activé ! Bienvenue dans Prophetic Board PRO.');
+      /* Nettoyer l'URL */
       window.history.replaceState({},'',window.location.pathname);
     }, 600);
   }
 })();
+
+
+
 // Listen for secret code typing
 document.addEventListener('keypress', function(e){
   if(_adminMode) return;
@@ -2519,6 +2526,9 @@ document.addEventListener('keypress', function(e){
     _adminBuffer = '';
   }
 });
+
+// Auto-restore if was admin
+// auto-restore handled above
 
 function applyTapeStrips(el){
     el.querySelectorAll('.tape-strip').forEach(function(s){s.remove();});
@@ -3918,9 +3928,9 @@ function pbRenderMir(){
 }
 
 function pbAddMiracle(){
-  if(!_ADMIN_MODE && !localStorage.getItem('pb_pro') && _pbMir.length>=_FREE_LIMITS.miracles){openM('unlockModal');toast('🔒 Limite gratuite : '+_FREE_LIMITS.miracles+' miracles');return;}
+  if(!_ADMIN_MODE && _pbMir.length>=_FREE_LIMITS.miracles){openM('unlockModal');toast('🔒 Limite gratuite : '+_FREE_LIMITS.miracles+' miracles');return;}
   var cat=document.getElementById('mirCat').value;
-  if(!_ADMIN_MODE && !localStorage.getItem('pb_pro') && cat&&cat.indexOf('_pro')!==-1){openM('unlockModal');toast('🔒 Catégorie PRO');document.getElementById('mirCat').value='priere';return;}
+  if(!_ADMIN_MODE && cat&&cat.indexOf('_pro')!==-1){openM('unlockModal');toast('🔒 Catégorie PRO');document.getElementById('mirCat').value='priere';return;}
   var t=document.getElementById('mirTitle').value.trim();
   var x=document.getElementById('mirText').value.trim();
   if(!t&&!x){toast('Remplis au moins un champ');return;}
@@ -4516,9 +4526,9 @@ document.addEventListener('DOMContentLoaded',function(){
   setInterval(_updateCounters, 1000);
   _updateCounters();
 
-    /* ── FREEMIUM — catégories miracles PRO ── */
+/* ── FREEMIUM — catégories miracles PRO ── */
   var _mirCatEl=document.getElementById('mirCat');if(_mirCatEl)_mirCatEl.addEventListener('change', function(){
-    if(this.value.indexOf('_pro') !== -1){
+    if(this.value.indexOf('_pro') !== -1 && !_ADMIN_MODE && !localStorage.getItem('pb_pro')){
       openM('unlockModal');
       this.value = 'priere';
     }
@@ -4773,15 +4783,15 @@ function fbShowTab(tab){
   <textarea class="mi" id="mirText" rows="3" placeholder="Décris ce que Dieu a accompli…" data-placeholder-en="Describe what God has done…"></textarea>
   <div style="display:flex;gap:6px;align-items:center;margin-bottom:.6rem;">
     <span style="font-size:9.5px;color:var(--muted);letter-spacing:.1em;white-space:nowrap;"><span class="ifr on">CATÉGORIE</span><span class="ien">CATEGORY</span></span>
- <select id="mirCat" style="flex:1;background:var(--surf);border:.5px solid var(--bord);color:var(--pearl);font-family:'Jost',sans-serif;font-size:11px;padding:5px 7px;border-radius:2px;outline:none;">
-  <option value="priere">🙏 Prière exaucée / Answered Prayer</option>
-  <option value="guerison">🌿 Guérison / Healing</option>
-  <option value="restauration">❤️ Restauration / Restoration</option>
-  <option disabled style="color:var(--gold);font-size:9px;letter-spacing:.1em;" class="mir-pro-sep">✦ PRO ✦</option>
-  <option value="provision_pro" class="mir-pro-opt">💰 Provision</option>
-  <option value="appel_pro" class="mir-pro-opt">🔥 Appel confirmé / Confirmed Calling</option>
-  <option value="autre_pro" class="mir-pro-opt">✨ Autre miracle / Other Miracle</option>
-</select>
+    <select id="mirCat" style="flex:1;background:var(--surf);border:.5px solid var(--bord);color:var(--pearl);font-family:'Jost',sans-serif;font-size:11px;padding:5px 7px;border-radius:2px;outline:none;">
+      <option value="priere"><span class="ifr on">🙏 Prière exaucée</span><span class="ien">🙏 Answered Prayer</span></option>
+      <option value="guerison"><span class="ifr on">🌿 Guérison</span><span class="ien">🌿 Healing</span></option>
+      <option value="restauration"><span class="ifr on">❤️ Restauration</span><span class="ien">❤️ Restoration</span></option>
+      <option disabled style="color:var(--gold);font-size:9px;letter-spacing:.1em;">✦ PRO ✦</option>
+      <option value="provision_pro"><span class="ifr on">💰 Provision</span><span class="ien">💰 Provision</span></option>
+      <option value="appel_pro"><span class="ifr on">🔥 Appel confirmé</span><span class="ien">🔥 Confirmed Calling</span></option>
+      <option value="autre_pro"><span class="ifr on">✨ Autre miracle</span><span class="ien">✨ Other Miracle</span></option>
+    </select>
   </div>
   <button onclick="pbAddMiracle()" class="bs bg" style="width:100%;margin-bottom:.8rem;padding:10px;"><span class="ifr on">✦ Ajouter ce miracle</span><span class="ien">✦ Add this miracle</span></button>
   <div id="mirList" style="max-height:200px;overflow-y:auto;"></div>
